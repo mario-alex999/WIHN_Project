@@ -21,3 +21,4 @@ npm run build
 - Logo lockup is centered in hero and implemented with protected clear-space (`1em`, approximating one "M" width).
 - Minimum logo symbol render size enforced at `83x60px` (22x16mm equivalent).
 - Secondary accents include orange, pink, green, turquoise blue, purple, and dark orange.
+# WIHN_Project
