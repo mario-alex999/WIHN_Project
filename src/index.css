@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'ITC Avant Garde Gothic';
+  src: local('ITC Avant Garde Gothic'), local('ITC Avant Garde Gothic Std');
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+}
+
+:root {
+  --wihn-deep-plum-rgb: 44 0 101;
+  --wihn-deep-plum-hex: #2c0065;
+  --wihn-deep-plum-websafe: #330066;
+  --wihn-orange: #ff8a00;
+  --wihn-pink: #f63bbe;
+  --wihn-green: #4cb46a;
+  --wihn-turquoise: #2f8ceb;
+  --wihn-purple: #9a40ef;
+  --wihn-dark-orange: #ff5c3d;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #f4f0f8;
+  color: #000;
+}
+
+.logo-protect {
+  padding: 1em;
+  min-width: calc(83px + 2em);
+}
+
+.logo-symbol {
+  width: clamp(83px, 12vw, 128px);
+  min-width: 83px;
+  min-height: 60px;
+  aspect-ratio: 22 / 16;
+  margin-inline: auto;
+  background-image: url('/assets/wihn-logo-symbol.jpg');
+  background-repeat: no-repeat;
+  background-size: 300% auto;
+  background-position: 56% 42%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
