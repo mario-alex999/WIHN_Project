@@ -34,21 +34,116 @@ body {
   color: #000;
 }
 
+.header-brand-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  font-family: 'ITC Avant Garde Gothic', 'ITC Avant Garde Gothic Std', 'TeX Gyre Adventor', 'Century Gothic', sans-serif;
+  font-size: 0.98rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  line-height: 1.1;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.96);
+  -webkit-text-stroke: 0.45px rgba(255, 255, 255, 0.42);
+  text-shadow:
+    0 0 1px rgba(255, 255, 255, 0.45),
+    0 0 10px rgba(154, 64, 239, 0.26),
+    0 0 18px rgba(47, 140, 235, 0.16);
+  transition: color 220ms ease, text-shadow 220ms ease, -webkit-text-stroke-color 220ms ease;
+}
+
+.header-brand-mark {
+  width: 1.05rem;
+  height: 1.05rem;
+  flex-shrink: 0;
+  object-fit: contain;
+  filter:
+    drop-shadow(0 0 1px rgba(255, 255, 255, 0.5))
+    drop-shadow(0 0 10px rgba(246, 59, 190, 0.16));
+  transform: translateY(-0.02rem);
+}
+
+.header-brand-title:hover,
+.header-brand-title:focus-visible {
+  color: #ffffff;
+  -webkit-text-stroke: 0.45px rgba(255, 255, 255, 0.68);
+  text-shadow:
+    0 0 1px rgba(255, 255, 255, 0.65),
+    0 0 14px rgba(246, 59, 190, 0.32),
+    0 0 24px rgba(47, 140, 235, 0.22);
+  outline: none;
+}
+
+.header-brand-title:hover .header-brand-mark,
+.header-brand-title:focus-visible .header-brand-mark {
+  filter:
+    drop-shadow(0 0 1px rgba(255, 255, 255, 0.72))
+    drop-shadow(0 0 12px rgba(246, 59, 190, 0.22))
+    drop-shadow(0 0 20px rgba(47, 140, 235, 0.16));
+}
+
+@media (min-width: 640px) {
+  .header-brand-title {
+    font-size: 1.08rem;
+    gap: 0.52rem;
+  }
+
+  .header-brand-mark {
+    width: 1.24rem;
+    height: 1.24rem;
+  }
+}
+
 .logo-protect {
-  padding: 1em;
-  min-width: calc(83px + 2em);
+  display: grid;
+  place-items: center;
+  padding: 0.55rem;
+  min-width: calc(110px + 1.1rem);
+  min-height: calc(126px + 1.1rem);
+  transition: box-shadow 260ms ease, border-color 260ms ease, transform 260ms ease;
 }
 
 .logo-symbol {
-  width: clamp(83px, 12vw, 128px);
-  min-width: 83px;
-  min-height: 60px;
-  aspect-ratio: 22 / 16;
+  width: clamp(110px, 14vw, 160px);
+  min-width: 110px;
+  min-height: 126px;
+  aspect-ratio: 536 / 611;
+  box-sizing: border-box;
+  padding: 0.28rem;
   margin-inline: auto;
-  background-image: url('/assets/wihn-logo-symbol.jpg');
-  background-repeat: no-repeat;
-  background-size: 300% auto;
-  background-position: 56% 42%;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.logo-symbol-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  transform: translate(-4%, -5%) scale(0.94);
+  transform-origin: center center;
+  transition: filter 260ms ease, transform 260ms ease;
+}
+
+.logo-protect:hover,
+.logo-protect:focus-within {
+  border-color: rgba(255, 255, 255, 0.85);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.25),
+    0 0 24px rgba(246, 59, 190, 0.34),
+    0 0 44px rgba(47, 140, 235, 0.28);
+  transform: translateY(-1px);
+}
+
+.logo-protect:hover .logo-symbol-image,
+.logo-protect:focus-within .logo-symbol-image {
+  filter: drop-shadow(0 0 8px rgba(255, 138, 0, 0.42))
+    drop-shadow(0 0 16px rgba(154, 64, 239, 0.3))
+    drop-shadow(0 0 26px rgba(47, 140, 235, 0.26));
+  transform: translate(-4%, -5%) scale(0.94);
 }
 
 @media (prefers-reduced-motion: reduce) {
