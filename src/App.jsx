@@ -89,6 +89,136 @@ const leadershipTeams = ['Founder', 'Core Team', 'Advisory Board', 'Regional Lea
 
 const galleryCategories = ['Events', 'Trainings', 'Networking Sessions'];
 
+const aboutWihnCopy =
+  'Women in Hospitality Nigeria Initiative (WIHN) is a professional association uniting women across hospitality and tourism; hotels & lodging, travel & tourism, F&B, events, education & training, wellness, and allied services; committed to growth, excellence, and industry advancement within hospitality and allied sectors.';
+
+const wihnPurposePoints = [
+  'Develop talent across all career stages',
+  'Strengthen industry standards through structure and collaboration',
+  'Create visibility and opportunities for women',
+  'Build a sustainable ecosystem that supports both individuals and organisations'
+];
+
+const wihnOfferings = [
+  'Professional development & capacity building',
+  'Industry networking & collaboration',
+  'Business and leadership visibility',
+  'Structured community and support systems',
+  'Access to opportunities, partnerships, and growth platforms'
+];
+
+const wihnAudience = [
+  'Students exploring hospitality, event, travel and tourism careers',
+  'Early to mid-level professionals',
+  'Founders and business owners',
+  'Executives and industry leaders',
+  'Organisations seeking strategic partnerships'
+];
+
+const membershipSnapshot = [
+  { title: 'Next Gen', label: 'Students', text: 'Start your journey' },
+  { title: 'Emerge Leaders', label: 'Career Professionals', text: 'Build momentum' },
+  { title: 'Business Collectives', label: 'Founders', text: 'Scale your business' },
+  { title: 'The Elites', label: 'Executives', text: 'Lead and influence' },
+  { title: 'Corporate Membership', label: 'Partners', text: 'Partner and grow' }
+];
+
+const whyWihnBuilds = ['Systems that work', 'People that grow', 'Opportunities that last'];
+
+const membershipTiers = [
+  {
+    title: 'Next Gen (Student Membership)',
+    audience:
+      'For students, recent graduates, and early-stage individuals exploring hospitality, tourism & related industries (0-2 years of experience).',
+    benefits: [
+      'Foundational industry exposure (group-based)',
+      'Career guidance and mentorship access',
+      'Entry into a network of emerging professionals',
+      'Discounted access to WIHN programs and learning events',
+      'Exposure to industry insights, trends, and opportunities',
+      'Participation in community discussions and learning forums'
+    ],
+    note:
+      'Advanced programs and leadership opportunities are unlocked through consistent engagement and progression.',
+    cta: 'Start Your Journey'
+  },
+  {
+    title: 'Emerge Leaders (Career Membership)',
+    audience: 'For professionals building their careers (3-7 years of experience).',
+    benefits: [
+      'All Next Gen benefits plus:',
+      'Structured mentorship (1:1 or group-based)',
+      'Eligibility for career spotlights (application/selection-based)',
+      'Access to industry certifications and training (discounted)',
+      'Participation in case study sessions and expert-led discussions',
+      'Priority for Job opportunities',
+      'Industry networking opportunities',
+      'Growth and leadership pathway programs'
+    ],
+    cta: 'Grow Your Career'
+  },
+  {
+    title: 'Business Collectives (Business Membership)',
+    audience:
+      'For Founders, co-founders, Directors, senior managers and business operators of registered or actively operating businesses.',
+    benefits: [
+      'Relevant Career Membership benefits plus:',
+      'Business visibility via WIHN platforms (features, showcases, events, business)',
+      'Access to Industry insight, business advisory and growth support platforms',
+      'Collaboration and co-marketing opportunities within the network',
+      'Access to funding/grant opportunities (application-based)'
+    ],
+    cta: 'Scale Your Business'
+  },
+  {
+    title: 'The Elites (Executive Membership)',
+    audience: 'For senior leaders, founders, and decision-makers (8+ years experience).',
+    benefits: [
+      'All Business Membership benefits plus:',
+      'Priority access to high-level networking events and closed-door roundtables',
+      'Executive spotlight and media visibility opportunities',
+      'Direct engagement with policymakers and industry stakeholders',
+      'Access to industry insights, reports, and strategic intelligence',
+      'Thought leadership positioning',
+      'Speaking opportunities at WIHN programs (curated)',
+      'Advisory, mentorship and leadership influence within WIHN initiatives'
+    ],
+    cta: 'Lead and Influence the industry'
+  },
+  {
+    title: 'Corporate Membership (Affiliates, Friends & Partners)',
+    audience: 'For organisations, brands and institutions seeking strategic partnerships with WIHN.',
+    benefits: [
+      'Brand visibility across WIHN platforms, programs, and events',
+      'Recognition as an official WIHN Corporate Partner',
+      'Access to WIHN talent pool and professional network',
+      'Participation in programs and initiatives',
+      'Co-branded programs, campaigns, and activations',
+      'Priority access to sponsorship and partnership opportunities'
+    ],
+    note: 'Corporate membership does not automatically confer individual membership to staff.',
+    cta: 'Partner with WIHN'
+  },
+  {
+    title: 'Corporate Staff Access',
+    audience: "For Organisations' Onboarding Teams.",
+    benefits: [
+      'Group onboarding',
+      'Discounted access for teams',
+      'Custom engagement based on organisational needs'
+    ],
+    note: 'Structured packages are available for organisations that want coordinated staff access.',
+    cta: 'Request Corporate Package'
+  }
+];
+
+const membershipPrinciples = [
+  'Membership is annual and renewable',
+  'Each tier is designed for a specific growth stage',
+  'Benefits increase with the level of access',
+  'Focused on growth and collaboration'
+];
+
 const challenges = [
   'Persistent gender bias in hiring and promotion pipelines.',
   'Limited access to leadership pathways and decision-making spaces.',
@@ -105,7 +235,7 @@ const goals = [
 
 const joinBenefits = ['Grow your career', 'Expand your network', 'Access opportunities'];
 
-const membershipRoles = ['Student', 'Professional', 'Executive', 'Entrepreneur'];
+const membershipRoles = membershipTiers.map((tier) => tier.title);
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 
 function normalizePath(pathname) {
@@ -127,6 +257,19 @@ function getCurrentPath() {
   }
 
   return normalizePath(window.location.pathname);
+}
+
+function getInitialTheme() {
+  if (typeof window === 'undefined') {
+    return 'light';
+  }
+
+  const savedTheme = window.localStorage.getItem('wihn-theme');
+  if (savedTheme === 'light' || savedTheme === 'dark') {
+    return savedTheme;
+  }
+
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
 function validateMembership(values) {
@@ -186,9 +329,9 @@ function LogoLockup() {
 function SectionHeading({ eyebrow, title, text }) {
   return (
     <div className="max-w-3xl">
-      <p className="font-heading text-sm uppercase tracking-[0.22em] text-accent-turquoise">{eyebrow}</p>
-      <h1 className="mt-3 font-heading text-3xl font-bold leading-tight text-deep-plum sm:text-4xl">{title}</h1>
-      <p className="mt-4 max-w-2xl text-base leading-relaxed text-deep-plum/80 sm:text-lg">{text}</p>
+      {eyebrow ? <p className="theme-eyebrow font-heading text-sm uppercase tracking-[0.22em]">{eyebrow}</p> : null}
+      <h1 className="theme-heading mt-3 font-heading text-3xl font-bold leading-tight sm:text-4xl">{title}</h1>
+      <p className="theme-text mt-4 max-w-2xl text-base leading-relaxed sm:text-lg">{text}</p>
     </div>
   );
 }
@@ -254,123 +397,263 @@ function PageLogoBackdrop({ tone = 'light', layout = 'default', mood = 'balanced
   );
 }
 
-function HomePage({ reveal, onNavigate }) {
+function HomePage({ reveal, onNavigate, theme }) {
   return (
-    <section className="relative isolate overflow-hidden bg-deep-plum text-pure-white">
-      <div className="pointer-events-none absolute inset-0 bg-hero-glow" aria-hidden="true" />
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.12] mix-blend-screen"
-        aria-hidden="true"
-        style={{
-          backgroundImage: "url('/assets/wihn-logo-palm.png')",
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
-          backgroundSize: 'min(58vw, 38rem)'
-        }}
-      />
-      <div
-        className="pointer-events-none absolute inset-0 opacity-25 mix-blend-screen"
-        aria-hidden="true"
-        style={{ backgroundImage: "url('/assets/wihn-brand-wave.jpg')", backgroundSize: 'cover', backgroundPosition: 'center bottom' }}
-      />
-      <div className="relative mx-auto flex min-h-[82svh] w-[min(100%,92rem)] flex-col px-4 pb-16 pt-4 text-center sm:px-8 sm:pt-5 lg:pb-20 lg:pt-6">
-        <motion.div {...reveal()} className="mx-auto w-fit">
-          <LogoLockup />
-        </motion.div>
+    <>
+      <section className="relative isolate overflow-hidden bg-deep-plum text-pure-white">
+        <div className="pointer-events-none absolute inset-0 bg-hero-glow" aria-hidden="true" />
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.12] mix-blend-screen"
+          aria-hidden="true"
+          style={{
+            backgroundImage: "url('/assets/wihn-logo-palm.png')",
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            backgroundSize: 'min(58vw, 38rem)'
+          }}
+        />
+        <div
+          className="pointer-events-none absolute inset-0 opacity-25 mix-blend-screen"
+          aria-hidden="true"
+          style={{ backgroundImage: "url('/assets/wihn-brand-wave.jpg')", backgroundSize: 'cover', backgroundPosition: 'center bottom' }}
+        />
+        <div className="relative mx-auto flex min-h-[82svh] w-[min(100%,92rem)] flex-col px-4 pb-16 pt-4 text-center sm:px-8 sm:pt-5 lg:pb-20 lg:pt-6">
+          <motion.div {...reveal()} className="mx-auto w-fit">
+            <LogoLockup />
+          </motion.div>
 
-        <div className="flex flex-1 flex-col justify-center">
-          <motion.h1
-            {...reveal(0.08)}
-            className="mx-auto mt-8 max-w-5xl font-heading text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl"
-          >
-            Inspiring, Uniting, and Advancing Women in Hospitality
-          </motion.h1>
-
-          <motion.p {...reveal(0.14)} className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-pure-white/90 sm:text-lg">
-            WIHN is dedicated to inspiring, uniting, and advancing women in the hospitality industry through leadership,
-            professional excellence, and gender diversity.
-          </motion.p>
-
-          <motion.div {...reveal(0.2)} className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <a
-              href="/join"
-              onClick={onNavigate('/join')}
-              className="rounded-full bg-accent-orange px-7 py-3 text-sm font-semibold uppercase tracking-wide text-ink-black transition hover:bg-pure-white"
+          <div className="flex flex-1 flex-col justify-center">
+            <motion.h1
+              {...reveal(0.08)}
+              className="mx-auto mt-8 max-w-5xl font-heading text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl"
             >
-              Join WIHN
-            </a>
-            <a
-              href="/partnerships-sponsorships"
-              onClick={onNavigate('/partnerships-sponsorships')}
-              className="rounded-full border border-pure-white px-7 py-3 text-sm font-semibold uppercase tracking-wide text-pure-white transition hover:bg-pure-white hover:text-deep-plum"
+              WIHN supports, empowers, connects and unifies women to attain Leadership positions, Advance Hospitality,
+              travel, and tourism, and Scale Impact.
+            </motion.h1>
+
+            <motion.p {...reveal(0.14)} className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-pure-white/90 sm:text-lg">
+              Women in Hospitality Nigeria Initiative (WIHN) is a national professional ecosystem designed for women
+              across every stage of their Journey from entry-level to executive leadership.
+            </motion.p>
+
+            <motion.p
+              {...reveal(0.18)}
+              className="mx-auto mt-7 max-w-xl font-heading text-xs uppercase tracking-[0.18em] text-accent-turquoise sm:text-sm"
             >
-              Partner With Us
+              "Choose an access level tailored to your goal"
+            </motion.p>
+
+            <motion.div {...reveal(0.22)} className="mt-10 flex flex-wrap items-center justify-center gap-4">
+              <a
+                href="/join"
+                onClick={onNavigate('/join')}
+                className="rounded-full bg-accent-orange px-7 py-3 text-sm font-semibold uppercase tracking-wide text-ink-black transition hover:bg-pure-white"
+              >
+                Join the Community
+              </a>
+              <a
+                href="/membership"
+                onClick={onNavigate('/membership')}
+                className="rounded-full border border-pure-white px-7 py-3 text-sm font-semibold uppercase tracking-wide text-pure-white transition hover:bg-pure-white hover:text-deep-plum"
+              >
+                Explore Membership
+              </a>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      <section className="theme-section-base relative isolate py-16 lg:py-20">
+        <div className="mx-auto w-[min(100%,92rem)] px-4 sm:px-8">
+          <div className="grid items-center gap-8 lg:grid-cols-[1.05fr,0.95fr] lg:gap-10">
+            <motion.div {...reveal()}>
+              <SectionHeading eyebrow="About WIHN" title="Women in Hospitality Nigeria Initiative" text={aboutWihnCopy} />
+            </motion.div>
+
+            <motion.div
+              {...reveal(0.08)}
+              className="featured-logo-shell flex justify-center"
+            >
+              <img
+                src={theme === 'dark' ? '/assets/logos/wihn-logo-white-text.png' : '/assets/logos/wihn-logo-black-text.png'}
+                alt="Women in Hospitality Nigeria logo"
+                className="featured-logo-glow mx-auto h-auto w-full max-w-[26rem] object-contain"
+              />
+            </motion.div>
+          </div>
+
+          <div className="mt-10 grid gap-6 lg:grid-cols-2">
+            <motion.article {...reveal(0.05)} className="theme-surface-strong rounded-2xl p-7 shadow-soft-xl">
+              <h2 className="font-heading text-2xl font-bold">We Exist To</h2>
+              <ul className="mt-5 space-y-3 text-sm text-pure-white/92">
+                {wihnPurposePoints.map((item) => (
+                  <li key={item} className="flex gap-3 leading-relaxed">
+                    <span className="mt-1.5 inline-block h-2 w-2 shrink-0 rounded-full bg-accent-orange" aria-hidden="true" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.article>
+
+            <motion.article {...reveal(0.1)} className="theme-surface theme-border rounded-2xl border p-7 shadow-soft-xl">
+              <h2 className="theme-heading font-heading text-2xl font-bold">What We Offer</h2>
+              <ul className="theme-text mt-5 space-y-3 text-sm">
+                {wihnOfferings.map((item) => (
+                  <li key={item} className="flex gap-3 leading-relaxed">
+                    <span className="mt-1.5 inline-block h-2 w-2 shrink-0 rounded-full bg-accent-turquoise" aria-hidden="true" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.article>
+          </div>
+
+          <motion.article {...reveal(0.14)} className="theme-surface-strong mt-10 rounded-3xl p-7 shadow-soft-xl sm:p-8">
+            <h2 className="font-heading text-2xl font-bold">Who WIHN is For</h2>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              {wihnAudience.map((item) => (
+                <div key={item} className="rounded-2xl border border-pure-white/18 bg-pure-white/10 px-4 py-4 text-sm leading-relaxed">
+                  {item}
+                </div>
+              ))}
+            </div>
+          </motion.article>
+
+          <motion.div {...reveal(0.18)} className="mt-12">
+            <SectionHeading title="Membership Snapshot" text="Unlock your access." />
+          </motion.div>
+
+          <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {membershipSnapshot.map((item, index) => (
+              <motion.article
+                key={item.title}
+                {...reveal(0.2 + index * 0.04)}
+                className="theme-surface theme-border rounded-2xl border p-6 shadow-soft-xl"
+              >
+                <p className="font-heading text-xs uppercase tracking-[0.18em] text-accent-pink">{item.label}</p>
+                <h2 className="theme-heading mt-3 font-heading text-xl font-bold">{item.title}</h2>
+                <p className="theme-text mt-3 text-sm leading-relaxed">{item.text}</p>
+              </motion.article>
+            ))}
+          </div>
+
+          <motion.div {...reveal(0.36)} className="mt-8 flex justify-center">
+            <a
+              href="/membership"
+              onClick={onNavigate('/membership')}
+              className="inline-flex rounded-full bg-deep-plum px-8 py-3 text-sm font-semibold uppercase tracking-wide text-pure-white transition hover:bg-accent-pink"
+            >
+              Explore Membership Options
             </a>
           </motion.div>
+
+          <div className="mt-10 grid gap-6 lg:grid-cols-[1.2fr,0.9fr]">
+            <motion.article {...reveal(0.4)} className="theme-surface-strong rounded-2xl p-7 shadow-soft-xl">
+              <p className="font-heading text-xs uppercase tracking-[0.18em] text-accent-turquoise">Why WIHN</p>
+              <h2 className="mt-3 font-heading text-2xl font-bold">Because growth should be structured, supported, and scalable.</h2>
+              <p className="mt-4 text-pure-white/88">At WIHN, we do not just gather women, we build:</p>
+              <ul className="mt-5 grid gap-3 sm:grid-cols-3">
+                {whyWihnBuilds.map((item) => (
+                  <li key={item} className="rounded-2xl border border-pure-white/18 bg-pure-white/10 px-4 py-4 text-sm font-semibold">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </motion.article>
+
+            <motion.article {...reveal(0.46)} className="theme-surface theme-border rounded-2xl border p-7 shadow-soft-xl">
+              <p className="font-heading text-xs uppercase tracking-[0.18em] text-accent-pink">Call to Action</p>
+              <h2 className="theme-heading mt-3 font-heading text-2xl font-bold">Ready to grow within a powerful ecosystem?</h2>
+              <p className="theme-text mt-4">Join WIHN Today.</p>
+              <a
+                href="/join"
+                onClick={onNavigate('/join')}
+                className="mt-8 inline-flex rounded-full bg-accent-orange px-8 py-3 text-sm font-semibold uppercase tracking-wide text-ink-black transition hover:bg-deep-plum hover:text-pure-white"
+              >
+                Join WIHN Today
+              </a>
+            </motion.article>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
 
-function AboutPage({ reveal }) {
+function AboutPage({ reveal, theme }) {
   return (
     <section className="relative isolate mx-auto w-[min(100%,92rem)] overflow-hidden px-4 py-16 sm:px-8 lg:py-20">
-      <PageLogoBackdrop tone="light" layout="wide" mood="bold" />
-      <motion.div {...reveal()}>
-        <SectionHeading
-          eyebrow="About WIHN"
-          title="A Strategic Framework for Gender Diversity and Professional Excellence"
-          text="Women in Hospitality Nigeria (WIHN) is a network of ambitious women across hospitality, tourism, and service industries. Our framework aligns leadership development, mentorship, collaboration, and opportunity access to build long-term, equitable growth."
-        />
-      </motion.div>
+      <div className="grid items-center gap-8 lg:grid-cols-[1.05fr,0.95fr] lg:gap-10">
+        <motion.div {...reveal()}>
+          <SectionHeading eyebrow="About WIHN" title="Women in Hospitality Nigeria Initiative" text={aboutWihnCopy} />
+        </motion.div>
 
-      <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {highlights.map((item, index) => (
-          <motion.article
-            key={item.title}
-            {...reveal(index * 0.06)}
-            className="rounded-2xl border border-deep-plum/10 bg-pure-white p-6 shadow-soft-xl"
-          >
-            <h2 className="font-heading text-lg font-bold text-deep-plum">{item.title}</h2>
-            <p className="mt-3 text-sm leading-relaxed text-deep-plum/80">{item.text}</p>
-          </motion.article>
-        ))}
+        <motion.div
+          {...reveal(0.08)}
+          className="featured-logo-shell flex justify-center"
+        >
+          <img
+            src={theme === 'dark' ? '/assets/logos/wihn-logo-white-text.png' : '/assets/logos/wihn-logo-black-text.png'}
+            alt="Women in Hospitality Nigeria logo"
+            className="featured-logo-glow mx-auto h-auto w-full max-w-[26rem] object-contain"
+          />
+        </motion.div>
       </div>
 
       <div className="mt-10 grid gap-6 lg:grid-cols-2">
-        <motion.article {...reveal(0.06)} className="rounded-2xl bg-deep-plum p-7 text-pure-white shadow-soft-xl">
-          <h2 className="font-heading text-2xl font-bold">Industry Impact</h2>
-          <p className="mt-3 text-pure-white/88">
-            Nigerian women are reshaping hospitality sectors with innovation, leadership, and operational excellence.
-          </p>
-          <ul className="mt-5 grid gap-3 sm:grid-cols-2">
-            {sectors.map((sector) => (
-              <li key={sector} className="rounded-xl border border-pure-white/20 bg-pure-white/10 px-4 py-3 text-sm font-semibold">
-                {sector}
+        <motion.article {...reveal(0.06)} className="theme-surface-strong rounded-2xl p-7 shadow-soft-xl">
+          <h2 className="font-heading text-2xl font-bold">We Exist To</h2>
+          <ul className="mt-5 space-y-3 text-sm text-pure-white/92">
+            {wihnPurposePoints.map((item) => (
+              <li key={item} className="flex gap-3 leading-relaxed">
+                <span className="mt-1.5 inline-block h-2 w-2 shrink-0 rounded-full bg-accent-orange" aria-hidden="true" />
+                <span>{item}</span>
               </li>
             ))}
           </ul>
         </motion.article>
 
-        <motion.article {...reveal(0.12)} className="rounded-2xl border border-deep-plum/12 bg-pure-white p-7 shadow-soft-xl">
-          <h2 className="font-heading text-2xl font-bold text-deep-plum">Challenges & Goals</h2>
-          <p className="mt-3 text-deep-plum/80">
-            We are committed to breaking barriers like gender bias and limited leadership access while accelerating professional growth.
-          </p>
-          <ul className="mt-4 space-y-2 text-sm text-deep-plum/85">
-            {challenges.slice(0, 3).map((challenge) => (
-              <li key={challenge} className="flex gap-3">
-                <span className="mt-1.5 inline-block h-2 w-2 rounded-full bg-accent-dark-orange" aria-hidden="true" />
-                <span>{challenge}</span>
+        <motion.article {...reveal(0.12)} className="theme-surface theme-border rounded-2xl border p-7 shadow-soft-xl">
+          <h2 className="theme-heading font-heading text-2xl font-bold">What We Offer</h2>
+          <ul className="theme-text mt-5 space-y-3 text-sm">
+            {wihnOfferings.map((item) => (
+              <li key={item} className="flex gap-3 leading-relaxed">
+                <span className="mt-1.5 inline-block h-2 w-2 shrink-0 rounded-full bg-accent-turquoise" aria-hidden="true" />
+                <span>{item}</span>
               </li>
             ))}
           </ul>
-          <ul className="mt-4 space-y-2 text-sm text-deep-plum/85">
-            {goals.slice(0, 2).map((goal) => (
-              <li key={goal} className="flex gap-3">
-                <span className="mt-1.5 inline-block h-2 w-2 rounded-full bg-accent-turquoise" aria-hidden="true" />
-                <span>{goal}</span>
+        </motion.article>
+      </div>
+
+      <motion.article {...reveal(0.18)} className="theme-surface-strong mt-10 rounded-3xl p-7 shadow-soft-xl sm:p-8">
+        <h2 className="font-heading text-2xl font-bold">Who WIHN is For</h2>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {wihnAudience.map((item) => (
+            <div key={item} className="rounded-2xl border border-pure-white/18 bg-pure-white/10 px-4 py-4 text-sm leading-relaxed">
+              {item}
+            </div>
+          ))}
+        </div>
+      </motion.article>
+
+      <div className="mt-10 grid gap-6 lg:grid-cols-[1fr,1.15fr]">
+        <motion.article {...reveal(0.24)} className="theme-surface theme-border rounded-2xl border p-7 shadow-soft-xl">
+          <p className="font-heading text-xs uppercase tracking-[0.18em] text-accent-pink">Why WIHN</p>
+          <h2 className="theme-heading mt-3 font-heading text-2xl font-bold">
+            Because growth should be structured, supported, and scalable.
+          </h2>
+          <p className="theme-text mt-4">
+            WIHN creates a professional association framework that helps women grow with clarity, support, and access.
+          </p>
+        </motion.article>
+
+        <motion.article {...reveal(0.3)} className="theme-surface-strong rounded-2xl p-7 shadow-soft-xl">
+          <p className="font-heading text-xs uppercase tracking-[0.18em] text-accent-turquoise">At WIHN, we build</p>
+          <ul className="mt-5 grid gap-3 sm:grid-cols-3">
+            {whyWihnBuilds.map((item) => (
+              <li key={item} className="rounded-2xl border border-pure-white/18 bg-pure-white/10 px-4 py-4 text-sm font-semibold">
+                {item}
               </li>
             ))}
           </ul>
@@ -380,10 +663,10 @@ function AboutPage({ reveal }) {
   );
 }
 
-function ProgramsPage({ reveal }) {
+function ProgramsPage({ reveal, theme }) {
   return (
     <section className="relative isolate mx-auto w-[min(100%,92rem)] overflow-hidden px-4 py-16 sm:px-8 lg:py-20">
-      <PageLogoBackdrop tone="light" layout="reverse" mood="balanced" />
+      <PageLogoBackdrop tone={theme === 'dark' ? 'dark' : 'light'} layout="reverse" mood="balanced" />
       <motion.div {...reveal()}>
         <SectionHeading
           eyebrow="Programs"
@@ -397,7 +680,7 @@ function ProgramsPage({ reveal }) {
           <motion.article
             key={program.title}
             {...reveal(index * 0.06)}
-            className="rounded-2xl bg-deep-plum p-7 text-pure-white shadow-soft-xl"
+            className="theme-surface-strong rounded-2xl p-7 shadow-soft-xl"
           >
             <h2 className="font-heading text-xl font-bold">{program.title}</h2>
             <p className="mt-3 leading-relaxed text-pure-white/90">{program.text}</p>
@@ -408,7 +691,7 @@ function ProgramsPage({ reveal }) {
   );
 }
 
-function MembershipPage({ reveal }) {
+function MembershipPage({ reveal, onNavigate, theme }) {
   const [formValues, setFormValues] = useState({
     name: '',
     email: '',
@@ -509,26 +792,103 @@ function MembershipPage({ reveal }) {
   };
 
   return (
-    <section className="relative isolate overflow-hidden bg-pure-white py-16 lg:py-20">
-      <PageLogoBackdrop tone="light" layout="wide" mood="calm" />
+    <section className="theme-section-base relative isolate overflow-hidden py-16 lg:py-20">
+      <PageLogoBackdrop tone={theme === 'dark' ? 'dark' : 'light'} layout="wide" mood="calm" />
       <div className="mx-auto w-[min(100%,92rem)] px-4 sm:px-8">
         <motion.div {...reveal()}>
           <SectionHeading
-            eyebrow="Membership"
-            title="Membership Pathways for Students, Professionals, Executives, and Entrepreneurs"
-            text="Choose your role and submit your details. WIHN will connect you to the right mentorship, events, leadership development, and growth opportunities."
+            eyebrow="Membership at WIHN"
+            title="Choose a level and access an ecosystem designed for your growth and visibility."
+            text="Each membership tier is structured for a different stage of growth, from students and career professionals to founders, executives, and corporate partners."
           />
         </motion.div>
 
+        <div className="mt-10 grid gap-6 xl:grid-cols-2">
+          {membershipTiers.map((tier, index) => (
+            <motion.article
+              key={tier.title}
+              {...reveal(0.04 + index * 0.04)}
+              className="theme-surface-soft theme-border rounded-2xl border p-6 shadow-soft-xl sm:p-7"
+            >
+              <p className="font-heading text-xs uppercase tracking-[0.18em] text-accent-pink">Membership Tier {index + 1}</p>
+              <h2 className="theme-heading mt-3 font-heading text-2xl font-bold">{tier.title}</h2>
+              <p className="theme-text mt-4 text-sm leading-relaxed">{tier.audience}</p>
+              <p className="theme-text-muted mt-5 font-heading text-xs uppercase tracking-[0.16em]">Key Benefits</p>
+              <ul className="theme-text mt-4 space-y-3 text-sm">
+                {tier.benefits.map((benefit) => (
+                  <li key={benefit} className="flex gap-3 leading-relaxed">
+                    <span className="mt-1.5 inline-block h-2 w-2 shrink-0 rounded-full bg-accent-orange" aria-hidden="true" />
+                    <span>{benefit}</span>
+                  </li>
+                ))}
+              </ul>
+              {tier.note ? <p className="theme-text-muted mt-5 text-sm leading-relaxed">Note: "{tier.note}"</p> : null}
+              <p className="mt-6 font-heading text-sm uppercase tracking-[0.14em] text-accent-turquoise">{tier.cta}</p>
+            </motion.article>
+          ))}
+        </div>
+
+        <div className="mt-10 grid gap-6 lg:grid-cols-[0.95fr,1.05fr]">
+          <motion.article {...reveal(0.32)} className="theme-surface-strong rounded-2xl p-7 shadow-soft-xl">
+            <h2 className="font-heading text-2xl font-bold">Membership Principles</h2>
+            <ul className="mt-5 space-y-3 text-sm text-pure-white/92">
+              {membershipPrinciples.map((item) => (
+                <li key={item} className="flex gap-3 leading-relaxed">
+                  <span className="mt-1.5 inline-block h-2 w-2 shrink-0 rounded-full bg-accent-turquoise" aria-hidden="true" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </motion.article>
+
+          <motion.article {...reveal(0.38)} className="theme-surface theme-border rounded-2xl border p-7 shadow-soft-xl">
+            <p className="font-heading text-xs uppercase tracking-[0.18em] text-accent-pink">Section 3: CTA</p>
+            <h2 className="theme-heading mt-3 font-heading text-2xl font-bold">
+              Your next level requires the right environment.
+            </h2>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <a
+                href="/join"
+                onClick={onNavigate('/join')}
+                className="inline-flex rounded-full bg-accent-orange px-6 py-3 text-sm font-semibold uppercase tracking-wide text-ink-black transition hover:bg-deep-plum hover:text-pure-white"
+              >
+                Join Now
+              </a>
+              <a
+                href="#membership-application"
+                className="theme-button-secondary inline-flex rounded-full border px-6 py-3 text-sm font-semibold uppercase tracking-wide transition"
+              >
+                Apply for Membership
+              </a>
+              <a
+                href="/partnerships-sponsorships"
+                onClick={onNavigate('/partnerships-sponsorships')}
+                className="theme-button-secondary inline-flex rounded-full border px-6 py-3 text-sm font-semibold uppercase tracking-wide transition"
+              >
+                Become a Corporate Partner
+              </a>
+            </div>
+          </motion.article>
+        </div>
+
         <motion.form
-          {...reveal(0.07)}
+          id="membership-application"
+          {...reveal(0.44)}
           onSubmit={onMembershipSubmit}
           noValidate
-          className="mt-10 rounded-3xl border border-deep-plum/12 bg-mist-gray p-6 shadow-soft-xl sm:p-8"
+          className="theme-surface-soft theme-border mt-10 rounded-3xl border p-6 shadow-soft-xl sm:p-8"
         >
-          <div className="grid gap-5 sm:grid-cols-2">
+          <div className="max-w-3xl">
+            <p className="font-heading text-xs uppercase tracking-[0.18em] text-accent-pink">Apply for Membership</p>
+            <h2 className="theme-heading mt-3 font-heading text-2xl font-bold">Choose your tier and submit your details.</h2>
+            <p className="theme-text mt-3 text-sm leading-relaxed">
+              Complete the form below and WIHN will connect you to the right pathway for mentorship, visibility, community, and growth.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-5 sm:grid-cols-2">
             <div>
-              <label htmlFor="name" className="font-heading text-sm uppercase tracking-[0.08em] text-deep-plum">
+              <label htmlFor="name" className="theme-heading font-heading text-sm uppercase tracking-[0.08em]">
                 Name
               </label>
               <input
@@ -541,7 +901,7 @@ function MembershipPage({ reveal }) {
                 onBlur={onInputBlur}
                 aria-invalid={Boolean(formErrors.name)}
                 aria-describedby={formErrors.name ? 'name-error' : undefined}
-                className="mt-2 w-full rounded-xl border border-deep-plum/20 bg-pure-white px-4 py-3 text-deep-plum outline-none transition focus-visible:border-accent-turquoise focus-visible:ring-2 focus-visible:ring-accent-turquoise/45"
+                className="theme-input mt-2 w-full rounded-xl border px-4 py-3 outline-none transition focus-visible:border-accent-turquoise focus-visible:ring-2 focus-visible:ring-accent-turquoise/45"
                 placeholder="Enter your full name"
               />
               {formErrors.name ? (
@@ -552,7 +912,7 @@ function MembershipPage({ reveal }) {
             </div>
 
             <div>
-              <label htmlFor="email" className="font-heading text-sm uppercase tracking-[0.08em] text-deep-plum">
+              <label htmlFor="email" className="theme-heading font-heading text-sm uppercase tracking-[0.08em]">
                 Email
               </label>
               <input
@@ -565,7 +925,7 @@ function MembershipPage({ reveal }) {
                 onBlur={onInputBlur}
                 aria-invalid={Boolean(formErrors.email)}
                 aria-describedby={formErrors.email ? 'email-error' : undefined}
-                className="mt-2 w-full rounded-xl border border-deep-plum/20 bg-pure-white px-4 py-3 text-deep-plum outline-none transition focus-visible:border-accent-turquoise focus-visible:ring-2 focus-visible:ring-accent-turquoise/45"
+                className="theme-input mt-2 w-full rounded-xl border px-4 py-3 outline-none transition focus-visible:border-accent-turquoise focus-visible:ring-2 focus-visible:ring-accent-turquoise/45"
                 placeholder="you@example.com"
               />
               {formErrors.email ? (
@@ -576,8 +936,8 @@ function MembershipPage({ reveal }) {
             </div>
 
             <div>
-              <label htmlFor="role" className="font-heading text-sm uppercase tracking-[0.08em] text-deep-plum">
-                Role
+              <label htmlFor="role" className="theme-heading font-heading text-sm uppercase tracking-[0.08em]">
+                Membership Tier
               </label>
               <select
                 id="role"
@@ -587,9 +947,9 @@ function MembershipPage({ reveal }) {
                 onBlur={onInputBlur}
                 aria-invalid={Boolean(formErrors.role)}
                 aria-describedby={formErrors.role ? 'role-error' : undefined}
-                className="mt-2 w-full rounded-xl border border-deep-plum/20 bg-pure-white px-4 py-3 text-deep-plum outline-none transition focus-visible:border-accent-turquoise focus-visible:ring-2 focus-visible:ring-accent-turquoise/45"
+                className="theme-input mt-2 w-full rounded-xl border px-4 py-3 outline-none transition focus-visible:border-accent-turquoise focus-visible:ring-2 focus-visible:ring-accent-turquoise/45"
               >
-                <option value="">Select your role</option>
+                <option value="">Select your membership tier</option>
                 {membershipRoles.map((role) => (
                   <option key={role} value={role}>
                     {role}
@@ -604,7 +964,7 @@ function MembershipPage({ reveal }) {
             </div>
 
             <div>
-              <label htmlFor="location" className="font-heading text-sm uppercase tracking-[0.08em] text-deep-plum">
+              <label htmlFor="location" className="theme-heading font-heading text-sm uppercase tracking-[0.08em]">
                 Location
               </label>
               <input
@@ -617,7 +977,7 @@ function MembershipPage({ reveal }) {
                 onBlur={onInputBlur}
                 aria-invalid={Boolean(formErrors.location)}
                 aria-describedby={formErrors.location ? 'location-error' : undefined}
-                className="mt-2 w-full rounded-xl border border-deep-plum/20 bg-pure-white px-4 py-3 text-deep-plum outline-none transition focus-visible:border-accent-turquoise focus-visible:ring-2 focus-visible:ring-accent-turquoise/45"
+                className="theme-input mt-2 w-full rounded-xl border px-4 py-3 outline-none transition focus-visible:border-accent-turquoise focus-visible:ring-2 focus-visible:ring-accent-turquoise/45"
                 placeholder="City / State"
               />
               {formErrors.location ? (
@@ -632,7 +992,7 @@ function MembershipPage({ reveal }) {
             <p
               role="status"
               className={`mt-5 text-sm ${
-                submitState.type === 'success' ? 'text-deep-plum' : 'text-accent-dark-orange'
+                submitState.type === 'success' ? 'theme-heading' : 'text-accent-dark-orange'
               }`}
             >
               {submitState.message}
@@ -640,7 +1000,7 @@ function MembershipPage({ reveal }) {
           ) : null}
 
           <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
-            <p className="text-sm text-deep-plum/70">
+            <p className="theme-text-muted text-sm">
               Submission endpoint: <code>/api/membership</code>
             </p>
             <button
@@ -648,7 +1008,7 @@ function MembershipPage({ reveal }) {
               disabled={isSubmitting}
               className="inline-flex items-center justify-center rounded-full bg-accent-orange px-8 py-3 text-sm font-semibold uppercase tracking-wide text-ink-black transition hover:bg-deep-plum hover:text-pure-white disabled:cursor-not-allowed disabled:opacity-70"
             >
-              {isSubmitting ? 'Submitting...' : 'Join Now'}
+              {isSubmitting ? 'Submitting...' : 'Apply for Membership'}
             </button>
           </div>
         </motion.form>
@@ -657,10 +1017,10 @@ function MembershipPage({ reveal }) {
   );
 }
 
-function EventsPage({ reveal }) {
+function EventsPage({ reveal, theme }) {
   return (
     <section className="relative isolate mx-auto w-[min(100%,92rem)] overflow-hidden px-4 py-16 sm:px-8 lg:py-20">
-      <PageLogoBackdrop tone="light" layout="default" mood="balanced" />
+      <PageLogoBackdrop tone={theme === 'dark' ? 'dark' : 'light'} layout="default" mood="balanced" />
       <motion.div {...reveal()}>
         <SectionHeading
           eyebrow="Events & Initiatives"
@@ -674,10 +1034,10 @@ function EventsPage({ reveal }) {
           <motion.article
             key={eventType}
             {...reveal(index * 0.06)}
-            className="rounded-2xl border border-deep-plum/12 bg-pure-white p-6 shadow-soft-xl"
+            className="theme-surface theme-border rounded-2xl border p-6 shadow-soft-xl"
           >
-            <h2 className="font-heading text-lg font-bold text-deep-plum">{eventType}</h2>
-            <p className="mt-2 text-sm text-deep-plum/75">Upcoming schedules and gallery previews are updated by initiative.</p>
+            <h2 className="theme-heading font-heading text-lg font-bold">{eventType}</h2>
+            <p className="theme-text mt-2 text-sm">Upcoming schedules and gallery previews are updated by initiative.</p>
           </motion.article>
         ))}
       </div>
@@ -685,10 +1045,10 @@ function EventsPage({ reveal }) {
   );
 }
 
-function PartnershipsPage({ reveal }) {
+function PartnershipsPage({ reveal, theme }) {
   return (
-    <section className="relative isolate overflow-hidden bg-pure-white py-16 lg:py-20">
-      <PageLogoBackdrop tone="light" layout="reverse" mood="bold" />
+    <section className="theme-section-base relative isolate overflow-hidden py-16 lg:py-20">
+      <PageLogoBackdrop tone={theme === 'dark' ? 'dark' : 'light'} layout="reverse" mood="bold" />
       <div className="mx-auto w-[min(100%,92rem)] px-4 sm:px-8">
         <motion.div {...reveal()}>
           <SectionHeading
@@ -703,7 +1063,7 @@ function PartnershipsPage({ reveal }) {
             <motion.article
               key={item.title}
               {...reveal(index * 0.07)}
-              className="rounded-2xl bg-deep-plum p-7 text-pure-white shadow-soft-xl"
+              className="theme-surface-strong rounded-2xl p-7 shadow-soft-xl"
             >
               <h2 className="font-heading text-xl font-bold">{item.title}</h2>
               <p className="mt-3 text-pure-white/90">{item.text}</p>
@@ -715,10 +1075,10 @@ function PartnershipsPage({ reveal }) {
   );
 }
 
-function MediaPage({ reveal }) {
+function MediaPage({ reveal, theme }) {
   return (
     <section className="relative isolate mx-auto w-[min(100%,92rem)] overflow-hidden px-4 py-16 sm:px-8 lg:py-20">
-      <PageLogoBackdrop tone="light" layout="wide" mood="balanced" />
+      <PageLogoBackdrop tone={theme === 'dark' ? 'dark' : 'light'} layout="wide" mood="balanced" />
       <motion.div {...reveal()}>
         <SectionHeading
           eyebrow="Media & Stories"
@@ -732,9 +1092,9 @@ function MediaPage({ reveal }) {
           <motion.article
             key={item}
             {...reveal(index * 0.07)}
-            className="rounded-2xl border border-deep-plum/12 bg-pure-white p-6 shadow-soft-xl"
+            className="theme-surface theme-border rounded-2xl border p-6 shadow-soft-xl"
           >
-            <p className="leading-relaxed text-deep-plum/85">{item}</p>
+            <p className="theme-text leading-relaxed">{item}</p>
           </motion.article>
         ))}
       </div>
@@ -742,10 +1102,10 @@ function MediaPage({ reveal }) {
   );
 }
 
-function LeadershipPage({ reveal }) {
+function LeadershipPage({ reveal, theme }) {
   return (
-    <section className="relative isolate overflow-hidden bg-pure-white py-16 lg:py-20">
-      <PageLogoBackdrop tone="light" layout="default" mood="calm" />
+    <section className="theme-section-base relative isolate overflow-hidden py-16 lg:py-20">
+      <PageLogoBackdrop tone={theme === 'dark' ? 'dark' : 'light'} layout="default" mood="calm" />
       <div className="mx-auto w-[min(100%,92rem)] px-4 sm:px-8">
         <motion.div {...reveal()}>
           <SectionHeading
@@ -760,7 +1120,7 @@ function LeadershipPage({ reveal }) {
             <motion.div
               key={team}
               {...reveal(index * 0.06)}
-              className="rounded-xl border border-deep-plum/12 bg-mist-gray px-5 py-4 font-heading text-sm uppercase tracking-[0.08em] text-deep-plum"
+              className="theme-surface-soft theme-border theme-heading rounded-xl border px-5 py-4 font-heading text-sm uppercase tracking-[0.08em]"
             >
               {team}
             </motion.div>
@@ -771,10 +1131,10 @@ function LeadershipPage({ reveal }) {
   );
 }
 
-function GalleryPage({ reveal }) {
+function GalleryPage({ reveal, theme }) {
   return (
     <section className="relative isolate mx-auto w-[min(100%,92rem)] overflow-hidden px-4 py-16 sm:px-8 lg:py-20">
-      <PageLogoBackdrop tone="light" layout="reverse" mood="balanced" />
+      <PageLogoBackdrop tone={theme === 'dark' ? 'dark' : 'light'} layout="reverse" mood="balanced" />
       <motion.div {...reveal()}>
         <SectionHeading
           eyebrow="Gallery"
@@ -788,7 +1148,7 @@ function GalleryPage({ reveal }) {
           <motion.article
             key={category}
             {...reveal(index * 0.07)}
-            className="rounded-2xl bg-deep-plum p-7 text-pure-white shadow-soft-xl"
+            className="theme-surface-strong rounded-2xl p-7 shadow-soft-xl"
           >
             <h2 className="font-heading text-2xl font-bold">{category}</h2>
             <p className="mt-3 text-pure-white/90">Organized collections for easier browsing and storytelling.</p>
@@ -799,10 +1159,10 @@ function GalleryPage({ reveal }) {
   );
 }
 
-function ContactPage({ reveal }) {
+function ContactPage({ reveal, theme }) {
   return (
     <section className="relative isolate mx-auto w-[min(100%,92rem)] overflow-hidden px-4 py-16 sm:px-8 lg:py-20">
-      <PageLogoBackdrop tone="light" layout="wide" mood="calm" />
+      <PageLogoBackdrop tone={theme === 'dark' ? 'dark' : 'light'} layout="wide" mood="calm" />
       <motion.div {...reveal()}>
         <SectionHeading
           eyebrow="Contact"
@@ -812,29 +1172,29 @@ function ContactPage({ reveal }) {
       </motion.div>
 
       <div className="mt-10 grid gap-6 md:grid-cols-2">
-        <motion.article {...reveal(0.06)} className="rounded-2xl bg-deep-plum p-7 text-pure-white shadow-soft-xl">
+        <motion.article {...reveal(0.06)} className="theme-surface-strong rounded-2xl p-7 shadow-soft-xl">
           <h2 className="font-heading text-xl font-bold">Corporate Address</h2>
           <p className="mt-3 text-pure-white/90">AV 22 Lagos street, 1203 P.O. Box 4234-Lagos.</p>
         </motion.article>
 
-        <motion.article {...reveal(0.12)} className="rounded-2xl border border-deep-plum/12 bg-pure-white p-7 shadow-soft-xl">
-          <h2 className="font-heading text-xl font-bold text-deep-plum">Contact Channels</h2>
-          <p className="mt-3 text-deep-plum/80">
-            <a className="underline decoration-deep-plum/40 underline-offset-4 hover:text-deep-plum" href="mailto:hello@womeninhospitalitynigeria.com">
+        <motion.article {...reveal(0.12)} className="theme-surface theme-border rounded-2xl border p-7 shadow-soft-xl">
+          <h2 className="theme-heading font-heading text-xl font-bold">Contact Channels</h2>
+          <p className="theme-text mt-3">
+            <a className="theme-link underline underline-offset-4" href="mailto:hello@womeninhospitalitynigeria.com">
               hello@womeninhospitalitynigeria.com
             </a>
           </p>
-          <p className="mt-2 text-sm text-deep-plum/70">Website: womeninhospitalitynigeria.com</p>
+          <p className="theme-text-muted mt-2 text-sm">Website: womeninhospitalitynigeria.com</p>
         </motion.article>
       </div>
     </section>
   );
 }
 
-function JoinPage({ reveal, onNavigate }) {
+function JoinPage({ reveal, onNavigate, theme }) {
   return (
     <section className="relative isolate mx-auto w-[min(100%,92rem)] overflow-hidden px-4 py-16 sm:px-8 lg:py-20">
-      <PageLogoBackdrop tone="light" layout="reverse" mood="bold" />
+      <PageLogoBackdrop tone={theme === 'dark' ? 'dark' : 'light'} layout="reverse" mood="bold" />
       <motion.div
         {...reveal()}
         className="rounded-3xl bg-gradient-to-r from-deep-plum to-ink-black px-6 py-10 text-center text-pure-white shadow-soft-xl sm:px-10"
@@ -867,8 +1227,8 @@ function NotFoundPage({ onNavigate }) {
   return (
     <section className="mx-auto flex min-h-[65svh] w-[min(100%,92rem)] flex-col items-center justify-center px-4 py-16 text-center sm:px-8">
       <p className="font-heading text-sm uppercase tracking-[0.22em] text-accent-turquoise">Page Not Found</p>
-      <h1 className="mt-3 font-heading text-4xl font-bold text-deep-plum">This page does not exist.</h1>
-      <p className="mt-4 max-w-xl text-deep-plum/80">Use the page menu to continue browsing WIHN content.</p>
+      <h1 className="theme-heading mt-3 font-heading text-4xl font-bold">This page does not exist.</h1>
+      <p className="theme-text mt-4 max-w-xl">Use the page menu to continue browsing WIHN content.</p>
       <a
         href="/"
         onClick={onNavigate('/')}
@@ -882,24 +1242,24 @@ function NotFoundPage({ onNavigate }) {
 
 function MainFooter({ onNavigate }) {
   return (
-    <footer className="border-t border-deep-plum/15 bg-mist-gray">
+    <footer className="theme-footer theme-border border-t">
       <div className="mx-auto grid w-[min(100%,92rem)] gap-8 px-4 py-12 sm:grid-cols-2 sm:px-8 lg:grid-cols-3">
         <div>
-          <p className="font-heading text-xs uppercase tracking-[0.18em] text-deep-plum/70">Women In Hospitality Nigeria</p>
-          <p className="mt-3 max-w-sm text-sm leading-relaxed text-deep-plum/80">
+          <p className="theme-text-muted font-heading text-xs uppercase tracking-[0.18em]">Women In Hospitality Nigeria</p>
+          <p className="theme-text mt-3 max-w-sm text-sm leading-relaxed">
             Empowering women through mentorship, leadership, collaboration, and industry-wide professional excellence.
           </p>
         </div>
         <div>
-          <h2 className="font-heading text-lg font-bold text-deep-plum">Corporate Address</h2>
-          <p className="mt-3 text-sm leading-relaxed text-deep-plum/80">AV 22 Lagos street, 1203 P.O. Box 4234-Lagos.</p>
+          <h2 className="theme-heading font-heading text-lg font-bold">Corporate Address</h2>
+          <p className="theme-text mt-3 text-sm leading-relaxed">AV 22 Lagos street, 1203 P.O. Box 4234-Lagos.</p>
         </div>
         <div>
-          <h2 className="font-heading text-lg font-bold text-deep-plum">Quick Navigation</h2>
-          <ul className="mt-3 space-y-2 text-sm text-deep-plum/80">
+          <h2 className="theme-heading font-heading text-lg font-bold">Quick Navigation</h2>
+          <ul className="theme-text mt-3 space-y-2 text-sm">
             {sitePages.slice(0, 6).map((item) => (
               <li key={item.path}>
-                <a href={item.path} onClick={onNavigate(item.path)} className="hover:text-deep-plum hover:underline">
+                <a href={item.path} onClick={onNavigate(item.path)} className="theme-link hover:underline">
                   {item.label}
                 </a>
               </li>
@@ -917,6 +1277,7 @@ export default function App() {
   const [pageMenuOpen, setPageMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentPath, setCurrentPath] = useState(getCurrentPath);
+  const [theme, setTheme] = useState(getInitialTheme);
 
   useEffect(() => {
     const onPopState = () => {
@@ -965,6 +1326,11 @@ export default function App() {
     };
   }, []);
 
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    window.localStorage.setItem('wihn-theme', theme);
+  }, [theme]);
+
   const reveal = (delay = 0) => ({
     initial: { opacity: 0, y: prefersReducedMotion ? 0 : 24 },
     whileInView: {
@@ -1010,56 +1376,46 @@ export default function App() {
       }`;
     }
 
-    return `block rounded-xl px-3 py-2 text-sm font-semibold transition ${
-      isActive ? 'bg-mist-gray text-accent-pink' : 'text-deep-plum hover:bg-mist-gray hover:text-accent-pink'
+    return `theme-menu-item block rounded-xl px-3 py-2 text-sm font-semibold transition ${
+      isActive ? 'theme-menu-item-active' : ''
     }`;
   };
 
   const renderPage = () => {
     switch (currentPath) {
       case '/':
-        return <HomePage reveal={reveal} onNavigate={onNavigate} />;
+        return <HomePage reveal={reveal} onNavigate={onNavigate} theme={theme} />;
       case '/about':
-        return <AboutPage reveal={reveal} />;
+        return <AboutPage reveal={reveal} theme={theme} />;
       case '/programs':
-        return <ProgramsPage reveal={reveal} />;
+        return <ProgramsPage reveal={reveal} theme={theme} />;
       case '/membership':
-        return <MembershipPage reveal={reveal} />;
+        return <MembershipPage reveal={reveal} onNavigate={onNavigate} theme={theme} />;
       case '/events-initiatives':
-        return <EventsPage reveal={reveal} />;
+        return <EventsPage reveal={reveal} theme={theme} />;
       case '/partnerships-sponsorships':
-        return <PartnershipsPage reveal={reveal} />;
+        return <PartnershipsPage reveal={reveal} theme={theme} />;
       case '/media-stories':
-        return <MediaPage reveal={reveal} />;
+        return <MediaPage reveal={reveal} theme={theme} />;
       case '/leadership':
-        return <LeadershipPage reveal={reveal} />;
+        return <LeadershipPage reveal={reveal} theme={theme} />;
       case '/gallery':
-        return <GalleryPage reveal={reveal} />;
+        return <GalleryPage reveal={reveal} theme={theme} />;
       case '/contact':
-        return <ContactPage reveal={reveal} />;
+        return <ContactPage reveal={reveal} theme={theme} />;
       case '/join':
-        return <JoinPage reveal={reveal} onNavigate={onNavigate} />;
+        return <JoinPage reveal={reveal} onNavigate={onNavigate} theme={theme} />;
       default:
         return <NotFoundPage onNavigate={onNavigate} />;
     }
   };
 
   return (
-    <div className="relative min-h-screen bg-mist-gray font-body text-ink-black antialiased">
+    <div data-theme={theme} className="theme-app relative min-h-screen font-body antialiased">
       {currentPath !== '/' ? (
         <>
           <div
-            className="pointer-events-none fixed inset-0 z-[1] opacity-[0.14]"
-            aria-hidden="true"
-            style={{
-              backgroundImage: "url('/assets/wihn-global-bg.jfif')",
-              backgroundRepeat: 'repeat',
-              backgroundPosition: 'center',
-              backgroundSize: '360px auto'
-            }}
-          />
-          <div
-            className="pointer-events-none fixed inset-0 z-[1] opacity-[0.065] mix-blend-multiply"
+            className="theme-page-watermark pointer-events-none fixed inset-0 z-[1]"
             aria-hidden="true"
             style={{
               backgroundImage: "url('/assets/wihn-logo-palm.png')",
@@ -1071,7 +1427,7 @@ export default function App() {
         </>
       ) : null}
       <div className="relative z-10">
-        <header className="sticky top-0 z-40 border-b border-pure-white/15 bg-deep-plum/95 backdrop-blur-sm">
+        <header className="theme-header sticky top-0 z-40 border-b backdrop-blur-sm">
         <div className="mx-auto flex w-[min(100%,92rem)] items-center justify-between px-4 py-3 sm:px-8">
           <a
             href="/"
@@ -1090,7 +1446,7 @@ export default function App() {
                 aria-haspopup="menu"
                 aria-expanded={pageMenuOpen}
                 onClick={() => setPageMenuOpen((open) => !open)}
-                className="inline-flex items-center gap-2 rounded-full border border-pure-white/50 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-pure-white transition hover:border-accent-pink hover:text-accent-pink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-turquoise focus-visible:ring-offset-2 focus-visible:ring-offset-deep-plum"
+                className="theme-header-control inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-turquoise focus-visible:ring-offset-2 focus-visible:ring-offset-deep-plum"
               >
                 Menu
                 <svg viewBox="0 0 20 20" className="h-4 w-4" aria-hidden="true">
@@ -1106,7 +1462,7 @@ export default function App() {
                     exit={{ opacity: 0, y: 8 }}
                     transition={{ duration: prefersReducedMotion ? 0 : 0.2 }}
                     role="menu"
-                    className="absolute right-0 top-full z-50 mt-3 max-h-[70vh] w-[22rem] overflow-auto rounded-2xl border border-deep-plum/10 bg-pure-white p-2 shadow-soft-xl"
+                    className="theme-menu absolute right-0 top-full z-50 mt-3 max-h-[70vh] w-[22rem] overflow-auto rounded-2xl border p-2 shadow-soft-xl"
                   >
                     {sitePages.map((item) => (
                       <li key={item.path}>
@@ -1126,6 +1482,26 @@ export default function App() {
               </AnimatePresence>
             </div>
 
+            <button
+              type="button"
+              onClick={() => setTheme((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'))}
+              className="theme-toggle inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-semibold uppercase tracking-wide transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-turquoise focus-visible:ring-offset-2 focus-visible:ring-offset-deep-plum"
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            >
+              <span className="theme-toggle-indicator inline-flex h-6 w-6 items-center justify-center rounded-full" aria-hidden="true">
+                {theme === 'dark' ? (
+                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none">
+                    <path d="M12 3.5v2.2M12 18.3v2.2M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M3.5 12h2.2M18.3 12h2.2M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none">
+                    <path d="M20 14.2A7.8 7.8 0 0 1 9.8 4 8.6 8.6 0 1 0 20 14.2Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+                  </svg>
+                )}
+              </span>
+              <span className="hidden sm:inline">{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+            </button>
+
             <a
               href="/join"
               onClick={onNavigate('/join')}
@@ -1139,7 +1515,7 @@ export default function App() {
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-nav-drawer"
               onClick={() => setMobileMenuOpen((value) => !value)}
-              className="inline-flex rounded-lg border border-pure-white/50 p-2 text-pure-white transition hover:border-accent-pink hover:text-accent-pink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-turquoise focus-visible:ring-offset-2 focus-visible:ring-offset-deep-plum md:hidden"
+              className="theme-header-control inline-flex rounded-lg border p-2 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-turquoise focus-visible:ring-offset-2 focus-visible:ring-offset-deep-plum md:hidden"
             >
               <span className="sr-only">Toggle navigation menu</span>
               <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
@@ -1174,16 +1550,26 @@ export default function App() {
             >
               <div className="mb-8 flex items-center justify-between">
                 <p className="font-heading text-xs uppercase tracking-[0.18em] text-pure-white/80">Page Menu</p>
-                <button
-                  type="button"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="inline-flex rounded-md border border-pure-white/50 p-2 text-pure-white transition hover:text-accent-pink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-turquoise focus-visible:ring-offset-2 focus-visible:ring-offset-deep-plum"
-                >
-                  <span className="sr-only">Close navigation menu</span>
-                  <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
-                    <path d="M6 6l12 12M18 6l-12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                  </svg>
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setTheme((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'))}
+                    className="inline-flex items-center gap-2 rounded-full border border-pure-white/40 px-3 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-pure-white transition hover:border-accent-pink hover:text-accent-pink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-turquoise focus-visible:ring-offset-2 focus-visible:ring-offset-deep-plum"
+                    aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+                  >
+                    {theme === 'dark' ? 'Light' : 'Dark'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="inline-flex rounded-md border border-pure-white/50 p-2 text-pure-white transition hover:text-accent-pink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-turquoise focus-visible:ring-offset-2 focus-visible:ring-offset-deep-plum"
+                  >
+                    <span className="sr-only">Close navigation menu</span>
+                    <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
+                      <path d="M6 6l12 12M18 6l-12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                    </svg>
+                  </button>
+                </div>
               </div>
 
               <ul className="space-y-3 overflow-auto">
