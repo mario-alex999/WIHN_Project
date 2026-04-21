@@ -1271,6 +1271,27 @@ function MainFooter({ onNavigate }) {
   );
 }
 
+function ThemeToggleIcon({ theme }) {
+  if (theme === 'dark') {
+    return (
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" aria-hidden="true">
+        <path
+          d="M12 3.5v2.2M12 18.3v2.2M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M3.5 12h2.2M18.3 12h2.2M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+        />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" aria-hidden="true">
+      <path d="M20 14.2A7.8 7.8 0 0 1 9.8 4 8.6 8.6 0 1 0 20 14.2Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export default function App() {
   const prefersReducedMotion = useReducedMotion();
   const pageMenuRef = useRef(null);
@@ -1278,6 +1299,7 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentPath, setCurrentPath] = useState(getCurrentPath);
   const [theme, setTheme] = useState(getInitialTheme);
+  const nextThemeLabel = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
 
   useEffect(() => {
     const onPopState = () => {
@@ -1482,26 +1504,6 @@ export default function App() {
               </AnimatePresence>
             </div>
 
-            <button
-              type="button"
-              onClick={() => setTheme((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'))}
-              className="theme-toggle inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-semibold uppercase tracking-wide transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-turquoise focus-visible:ring-offset-2 focus-visible:ring-offset-deep-plum"
-              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-            >
-              <span className="theme-toggle-indicator inline-flex h-6 w-6 items-center justify-center rounded-full" aria-hidden="true">
-                {theme === 'dark' ? (
-                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none">
-                    <path d="M12 3.5v2.2M12 18.3v2.2M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M3.5 12h2.2M18.3 12h2.2M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                  </svg>
-                ) : (
-                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none">
-                    <path d="M20 14.2A7.8 7.8 0 0 1 9.8 4 8.6 8.6 0 1 0 20 14.2Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
-                  </svg>
-                )}
-              </span>
-              <span className="hidden sm:inline">{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
-            </button>
-
             <a
               href="/join"
               onClick={onNavigate('/join')}
@@ -1521,6 +1523,18 @@ export default function App() {
               <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
                 <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
               </svg>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setTheme((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'))}
+              className="theme-toggle inline-flex h-10 w-10 items-center justify-center rounded-full border transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-turquoise focus-visible:ring-offset-2 focus-visible:ring-offset-deep-plum"
+              aria-label={nextThemeLabel}
+              title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
+            >
+              <span className="theme-toggle-indicator inline-flex h-7 w-7 items-center justify-center rounded-full" aria-hidden="true">
+                <ThemeToggleIcon theme={theme} />
+              </span>
             </button>
           </div>
         </div>
@@ -1554,10 +1568,13 @@ export default function App() {
                   <button
                     type="button"
                     onClick={() => setTheme((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'))}
-                    className="inline-flex items-center gap-2 rounded-full border border-pure-white/40 px-3 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-pure-white transition hover:border-accent-pink hover:text-accent-pink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-turquoise focus-visible:ring-offset-2 focus-visible:ring-offset-deep-plum"
-                    aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+                    className="theme-toggle inline-flex h-10 w-10 items-center justify-center rounded-full border transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-turquoise focus-visible:ring-offset-2 focus-visible:ring-offset-deep-plum"
+                    aria-label={nextThemeLabel}
+                    title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
                   >
-                    {theme === 'dark' ? 'Light' : 'Dark'}
+                    <span className="theme-toggle-indicator inline-flex h-7 w-7 items-center justify-center rounded-full" aria-hidden="true">
+                      <ThemeToggleIcon theme={theme} />
+                    </span>
                   </button>
                   <button
                     type="button"
